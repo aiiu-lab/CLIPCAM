@@ -1,0 +1,11 @@
+tqdm
+opencv-python
+ftfy
+regex
+matplotlib
+ttach
+scipy
+ipywidgets
+timm
+pandas
+pillow
