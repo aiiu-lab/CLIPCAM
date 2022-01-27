@@ -140,10 +140,10 @@ python evaluate.py \
 ## Citing
 If you find the paper or the code useful for your study, please consider citing the CLIPCAM paper:
 ```bash
-@article{,
-   author = {},
-    title = "{}",
-    journal = {},
-    year = 
+@article{clipcam_hsia_icassp2022,
+    author = {Hsia, Hsuan-An and Lin, Che-Hsien and Kung, Bo-Han and Chen, Jhao-Ting and Tan, Daniel Stanley and Chen, Jun-Cheng and Hua, Kai-Lung},
+    title = "{CLIPCAM: A Simple Baseline for Zero-shot Text-guided Object and Action Localization}",
+    booktitle = {Proceedings of IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+    year = {2022}
 }
 ```
