@@ -1,7 +1,7 @@
 # CLIPCAM: Zero-shot Text-guided Object and Action Localization
 ## Official implementation of CLIPCAM: A Simple Baseline for Zero-shot Object and Action Localization (ICASSP 2022)
 
-<img src="imgs/clipcam_model.png" alt="clicpam" style="max-width: 550px;"/>
+![clicpam](imgs/clipcam_model.png|width=550px)
 
 ## Table of Contents
 * [Environment Setup](#environment-setup)
@@ -20,7 +20,7 @@
         * Custom Images
 * [Other features](#other-features)
     * [Iterative Mask](#iterative-mask)
-    * [Weather Attacks](#weather-attack)
+    * [Weather Attacks](#weather-attacks)
 
 ## Environment Setup
 1. create conda enviroment with Python=3.7  
@@ -83,12 +83,12 @@ Download [ILSVRC](https://www.image-net.org/download.php) validation set.
 Download [COSMOS](https://github.com/shivangi-aneja/COSMOS) validation set.
 
 ## Evaluation
-![grid_v_single](imgs/grid_v_single.png)
+![grid_v_single](imgs/grid_v_single.png|width=900px)
 
 ### Grid-view Zero-shot Object Localization
-<img src="imgs/grid_localization.png" alt="grid_localization" style="max-width: 400px;"/>
+![grid_localization](imgs/grid_localization.png|width=400px)
 
-<img src="imgs/object_localization.png" alt="object_localization" style="max-width: 400px;"/>
+![object_localization](imgs/object_localization.png|width=400px)
 
 1. Dataset structure (OpenImage)
 ```
@@ -118,7 +118,7 @@ python evaluate_grid_openimage.py \
 ```
 
 ### Grid-view Zero-shot Action Localization
-<img src="imgs/action_localization.png" alt="action_localization" style="max-width: 400px;"/>
+![action_localization](imgs/action_localization.png|width=400px)
 
 1. Dataset structure (HICO-DET)
 ```
@@ -178,7 +178,7 @@ python verb_grid.py \
         --attack 'None'
     ```
 2. ILSVRC  
-    <img src="imgs/ilsvrc.png" alt="ilsvrc" style="max-width: 400px;"/>  
+    ![ilsvrc](imgs/ilsvrc.png|width=400px)  
     a. Dataset Structure  
     ```
     |--ImageNet
@@ -209,7 +209,7 @@ python verb_grid.py \
         --attack 'None'
     ```
 3. COSMOS, OpenImage and custom images  
-    <img src="imgs/cosmos.png" alt="cosmos" style="max-width: 500px;"/>  
+    ![cosmos](imgs/cosmos.png|width=500px)  
     a. Run `evaluate.py`  with `--dataset cosmos` or `--dataset openimage`
     ```
     python evaluate.py \
@@ -238,12 +238,12 @@ python verb_grid.py \
 ## Other features
 ### Iterative Mask
 We propose an iterative refinement method based on masking out high neural importance areas to expand attention or enhance weak response regions.  
-<img src="imgs/iterative_mask.png" alt="iterative_mask" style="max-width: 450px;"/>  
+![iterative_mask](imgs/iterative_mask.png|width=450px)  
 Set `--distill_num {n}` to iteratively mask out {n} times. 
 
 ### Weather Attacks
 We experimented the ability of CLIPCAM to handle attacked images.  
-<img src="imgs/attack.png" alt="attack" style="max-width: 450px;"/>  
+![attack](imgs/attack.png|width=450px)  
 Set `--attack fog` or `--attack snow` to create fog or snow attack. 
 
 ## Citing

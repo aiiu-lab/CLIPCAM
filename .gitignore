@@ -4,3 +4,4 @@ train_action_classifier.py
 /eval_result
 *__pycache__
 /checkpoints
+checkpoints.zip
