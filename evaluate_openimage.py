@@ -17,9 +17,9 @@ from utils.imagenet_utils import *
 from utils.evaluation_tools import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--data_dir", type=str, default='/scratch2/users/jtchen0528/Datasets/OpenImage/test/data',
+parser.add_argument("--data_dir", type=str, default='datasets/OpenImage/validation',
                     help="directory of OpenImage")
-parser.add_argument("--save_dir", type=str, default='eval_result',
+parser.add_argument("--save_dir", type=str, default='eval_result/rn50-grad',
                     help="directory to save the result")
 parser.add_argument("--gpu_id", type=int, default=1,
                     help="GPU to run on")
@@ -165,12 +165,12 @@ for i, (images, orig_image) in enumerate(tqdm(loader)):
                 Final_result.append([image_names_total[mask_num], label, iou_total[mask_num].item()])
                 getHeatMap(grayscale_cam_total[mask_num], orig_images_embeddings[mask_num].permute(1, 2, 0).cpu().numpy(), os.path.join(SAVE_DIR, image_names_total[mask_num] + '_' + label + '.png'), pred_bbox[mask_num], gt_bboxes[mask_num])
 
-    if i  % 10 == 0:
-        print(f"Done {((i + 1) / len(loader) * 100)}%")
+    # if i  % 10 == 0:
+    #     print(f"Done {((i + 1) / len(loader) * 100)}%")
 
 top1 = (total_acc / n) * 100
 
-print(f"localization accuracy: {top1:.2f}")
+print(f"localization mIoU: {top1:.2f}")
 # if SAVE_RESULT:
 with open(os.path.join(SAVE_DIR, 'result.txt'), 'w') as f:
     f.write(str(Final_result))

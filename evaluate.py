@@ -19,11 +19,11 @@ from utils.imagenet_utils import *
 from utils.evaluation_tools import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--data_dir", type=str, default='/scratch2/users/jtchen0528/Datasets/OpenImage/test/data',
+parser.add_argument("--data_dir", type=str, default='datasets/OpenImage/validation/data',
                     help="directory of dataset")
 parser.add_argument("--dataset", type=str, default='',
                     help="dataset name")
-parser.add_argument("--save_dir", type=str, default='eval_result',
+parser.add_argument("--save_dir", type=str, default='eval_result/rn50-grad',
                     help="directory to save the result")
 parser.add_argument("--gpu_id", type=int, default=0,
                     help="GPU to work on")
@@ -35,8 +35,10 @@ parser.add_argument("--resize", type=int,
                     default=1, help="Resize image or not")
 parser.add_argument("--distill_num", type=int, default=0,
                     help="Number of iterative masking")
+parser.add_argument("--attack", type=str, default=None,
+                    help="attack type: \"snow\", \"fog\"")
 parser.add_argument("--sentence_prefix", type=str, default='',
-                    help="input text type: \"sentence\", \"word\"")
+                    help="input text type: \"sentence\", \"word\" (only for OpenImage)")
 parser.add_argument("--mask_threshold", type=float, default=0.2,
                     help="Threshold of the localization mask")
 args = parser.parse_args()
@@ -50,6 +52,7 @@ BATCH_SIZE = 1
 CLIP_MODEL_NAME = args.clip_model_name
 CAM_MODEL_NAME = args.cam_model_name
 RESIZE = args.resize
+ATTACK = args.attack
 DISTILL_NUM = args.distill_num
 MASK_THRESHOLD = args.mask_threshold
 if CLIP_MODEL_NAME == 'RN50-pretrained' or CLIP_MODEL_NAME == 'ViT-pretrained':
@@ -68,7 +71,7 @@ cam = getCAM(model_name=CAM_MODEL_NAME, model=model, target_layer=target_layer,
 ImageTransform = getImageTranform(resize=RESIZE)
 originalTransform = getImageTranform(resize=RESIZE, normalized=False)
 
-dataset = DirDataset(data_dir=DATA_DIR, transform=ImageTransform, original_transform=originalTransform)
+dataset = DirDataset(data_dir=DATA_DIR, transform=ImageTransform, original_transform=originalTransform, gpu_id=GPU_ID, attack=ATTACK)
 loader = torch.utils.data.DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=False)
 
 if DATASET_NAME == 'openimage':

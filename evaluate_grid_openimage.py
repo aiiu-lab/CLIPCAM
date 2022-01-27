@@ -16,9 +16,9 @@ from utils.preprocess import getAttacker
 from utils.dataset import OpenImageDataset
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--data_dir", type=str, default='/scratch2/users/jtchen0528/Datasets/OpenImage/validation/data',
+parser.add_argument("--data_dir", type=str, default='datasets/OpenImage/validation',
                     help="directory of openimage dataset")
-parser.add_argument("--save_dir", type=str, default='eval_result',
+parser.add_argument("--save_dir", type=str, default='eval_result/rn50-grad',
                     help="directory to save the result")
 parser.add_argument("--gpu_id", type=int, default=1,
                     help="GPU to run on")
@@ -77,7 +77,7 @@ for chnk_data in chunker(selected_data, 4, 0):
     chnk_data = chnk_data.reset_index()
     grid = []
     for index, row in chnk_data.iterrows():
-        img = getImage(DATA_DIR, row['ImageID'])
+        img = getImage(os.path.join(DATA_DIR, 'data'), row['ImageID'])
         mask = getGTMask(row, 224, 224)
         # transforms.ToPILImage()(ori_img).convert('RGB').save(os.path.join(SAVE_DIR, row['ImageID'] + str(index) + '.png'))
         mask_im = Image.fromarray((mask * 255).astype(np.uint8)).convert('L')

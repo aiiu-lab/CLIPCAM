@@ -1,2 +1,6 @@
 train_action_classifier.py
 /scripts
+/datasets
+/eval_result
+*__pycache__
+/checkpoints

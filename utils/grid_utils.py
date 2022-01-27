@@ -36,7 +36,7 @@ def get_concat(im1, im2, im3, im4):
     return dst
 
 
-def get_cat_gt_masks(grid, turn, data_dir):
+def get_cat_gt_masks(grid, turn):
     negative_mask = Image.fromarray(
         np.zeros((224, 224)).astype('uint8')).convert('L')
     l = [negative_mask, negative_mask, negative_mask, negative_mask]

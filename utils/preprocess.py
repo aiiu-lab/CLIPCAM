@@ -68,7 +68,6 @@ def getAttacker(pixel_img, type = 'None', gpu_id = 0):
         background = np.array(pixel_img)
         background = background.astype(float)
         alphamask_inverse = alphamask_inverse.astype(float)
-
         if len(background.shape) == 2:
             background = np.dstack((background, background, background))
         if len(alphamask_inverse.shape) == 2:

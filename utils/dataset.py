@@ -76,7 +76,7 @@ class ImageNetDataset(data.Dataset):
 
 
 class DirDataset(data.Dataset):
-    def __init__(self, data_dir, transform, original_transform):
+    def __init__(self, data_dir, transform, original_transform, gpu_id, attack=None):
         self.dir = data_dir
 
         data_list = []
@@ -87,6 +87,8 @@ class DirDataset(data.Dataset):
         self.data_list = data_list
         self.transform = transform
         self.original_transform = original_transform
+        self.attack = attack
+        self.gpu_id = gpu_id
 
     def __len__(self):
         return len(self.data_list)
@@ -94,6 +96,11 @@ class DirDataset(data.Dataset):
     def __getitem__(self, index):
         image_path = self.data_list[index]
         image = Image.open(image_path)
+
+        if self.attack is not None:
+            image = image.resize((224, 224))
+            image = getAttacker(image, type=self.attack, gpu_id=self.gpu_id)
+
         orig_image = self.original_transform(image)
         image = self.transform(image)
         return image, orig_image
@@ -102,12 +109,12 @@ class OpenImageDataset(data.Dataset):
     def __init__(self, data_dir, transform, original_transform, gpu_id = 0, attack = None):
         self.dir = data_dir
 
-        self.detection_data = pd.read_csv(os.path.join(self.dir, '..', 'labels', 'detections.csv'))
-        self.class_names = pd.read_csv(os.path.join(self.dir, '..', 'metadata', 'classes.csv'), names=['ID', 'Class'], header=None)
+        self.detection_data = pd.read_csv(os.path.join(self.dir, 'labels', 'detections.csv'))
+        self.class_names = pd.read_csv(os.path.join(self.dir, 'metadata', 'classes.csv'), names=['ID', 'Class'], header=None)
 
         data_list = []
-        for pic in os.listdir(self.dir):
-            path = os.path.join(self.dir, pic).replace('\\', '/')
+        for pic in os.listdir(os.path.join(self.dir, 'data')):
+            path = os.path.join(self.dir, 'data', pic).replace('\\', '/')
             data_list.append(path)
 
         self.data_list = data_list

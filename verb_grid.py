@@ -37,7 +37,7 @@ parser.add_argument("--mask_threshold", type=float, default=0.2,
 parser.add_argument("--train_mode", type=str, default='half',
                     help="modes to load dataset: full, half, few")
 parser.add_argument("--model_name", type=str, default='model',
-                    help="pretrained model name in checkpoint/models")
+                    help="pretrained model .pth path")
 parser.add_argument("--save_result", type=int, default=0,
                     help="save result or not")
 args = parser.parse_args()
@@ -71,17 +71,24 @@ ImageTransform = getImageTranform(resize=RESIZE)
 originalTransform = getImageTranform(resize=RESIZE, normalized=False)
 
 test_dataset = HICODataset(
-    DATA_DIR, ImageTransform, originalTransform, split='test', mode=TRAIN_MODE)
+    DATA_DIR, ImageTransform, originalTransform, split='test', mode='full')
 if PRETRAINED:
     dataset = HICODataset(DATA_DIR, ImageTransform,
                             originalTransform, split='train', mode=TRAIN_MODE)
+    test_dataset_pre = HICODataset(
+        DATA_DIR, ImageTransform, originalTransform, split='test', mode=TRAIN_MODE)
     total_actions = sorted(
-        list(set(dataset.gt_actions + test_dataset.gt_actions)))
+        list(set(dataset.gt_actions + test_dataset_pre.gt_actions)))
         # total_actions = dataset.gt_actions
     model = getFineTune(model_name=CLIP_MODEL_NAME,
                         model=model, out_feature=len(total_actions))
-    model.load_state_dict(torch.load(
-        os.path.join('checkpoints', 'models', MODEL_NAME)))
+    model.load_state_dict(
+        torch.load(
+                os.path.join(MODEL_NAME),
+                map_location=lambda storage, 
+                loc: storage
+            )
+        )
     model = model.to(GPU_ID)
 
 raw_data = test_dataset.data_list
@@ -143,16 +150,14 @@ for grid in pbar:  # grid = [img, verb, noun, mask, mask_im]
     img_grid_small_tensor = ImageTransform(
         img_grid_small).unsqueeze(0).to(GPU_ID)
     for i in range(4):
-        #sentence = [f'{SENTENCE_PREFIX}{grid[i][2]}']
-        # sentence = [f'{grid[i][2]} {grid[i][1]}']
         if PRETRAINED:
             try:
-                ground_trouth_action_id = total_actions.index(grid[i][2])
+                ground_trouth_action_id = total_actions.index(grid[i][1])
             except:
                 ground_trouth_action_id = -1
         else:
-            sentence = [f'Someone is {grid[i][2]}']
-        mask_im = get_cat_gt_masks(grid, i, DATA_DIR)
+            sentence = [f'Someone is {grid[i][1]} {grid[i][2]}']
+        mask_im = get_cat_gt_masks(grid, i)
         # mask_im.save(os.path.join(SAVE_DIR, str(total_count) + '_mask_im.png'))
         mask_np = (np.array(mask_im) / 255).astype(np.uint8)
         _, mask_bboxes = get_4_bbox(mask_np)
@@ -224,12 +229,12 @@ for grid in pbar:  # grid = [img, verb, noun, mask, mask_im]
             [top_left, top_right, bot_left, bot_right])
         if i == prediction_region:
             region_correct += 1
-            if grid[i][2] in HICO_filtered_actions:
+            if grid[i][1] in HICO_filtered_actions:
                 seen += 1
             else:
                 unseen += 1
 
-        if grid[i][2] in HICO_filtered_actions:
+        if grid[i][1] in HICO_filtered_actions:
             seen_count += 1
             iou_seen.append(iou)
         else:
