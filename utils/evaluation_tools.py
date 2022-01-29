@@ -120,6 +120,57 @@ def getHeatMapNoBBox(mask, img, filename):
     heatmap_im = Image.fromarray(heatmap).convert('RGB')
     heatmap_im.save(filename)
 
+def getHeatMapOneBBox(mask, img, bboxes, text = None, size=224):
+    img_im = Image.fromarray((img * 255).astype(np.uint8)).convert('RGB')
+    # img_im.save(filename.split('.')[0] + '_ori.png')
+    img = np.float32(img)
+    heatmap = cv2.applyColorMap(np.uint8(255 * mask), cv2.COLORMAP_JET)
+    heatmap = cv2.cvtColor(heatmap, cv2.COLOR_BGR2RGB)
+    heatmap = np.float32(heatmap) / 255
+
+    if np.max(img) > 1:
+        raise Exception(
+            "The input image should np.float32 in the range [0, 1]")
+
+    cam = heatmap + img
+    cam = cam / np.max(cam)
+    heatmap = np.uint8(255 * cam)
+    heatmap_im = Image.fromarray(heatmap).convert('RGB')
+
+    draw = ImageDraw.Draw(heatmap_im, 'RGBA')
+    for bbox in bboxes:
+        draw.rectangle((bbox[0], bbox[1], bbox[2], bbox[3]), fill=(
+            0, 0, 0, 0), outline=(0, 0, 255), width=4)
+
+    if size == 224:
+        bg_size = 350
+    elif size == 448:
+        heatmap_im = heatmap_im.resize((448, 448))
+        bg_size = 600
+
+    img_w, img_h = heatmap_im.size
+    background = Image.new('RGBA', (bg_size, bg_size), (255, 255, 255, 255))
+    bg_w, bg_h = background.size
+    offset = ((bg_w - img_w) // 2, (bg_h - img_h) // 2)
+    background.paste(heatmap_im, offset)
+    final_img = background
+
+    font = ImageFont.truetype("utils/FreeMono.ttf", 18)
+    draw = ImageDraw.Draw(final_img, 'RGBA')
+    if size == 224:
+        if text != None:
+            draw.text((50, 294), 'input: ' + text, (255, 255, 255),
+                    font=font, stroke_width=2, stroke_fill=(0, 0, 0))
+            draw.text((140, 40), 'CLIPCAM', (255, 255, 255),
+                    font=font, stroke_width=2, stroke_fill=(0, 0, 0))
+    elif size == 448:
+        if text != None:
+            draw.text((80, 530), 'input: ' + text, (255, 255, 255),
+                    font=font, stroke_width=2, stroke_fill=(0, 0, 0))
+            draw.text((260, 50), 'CLIPCAM', (255, 255, 255),
+                    font=font, stroke_width=2, stroke_fill=(0, 0, 0))
+
+    return final_img
 
 def MaskToBBox(masks, size):
 
