@@ -11,5 +11,5 @@ dataset = fiftyone.zoo.datasets.download_zoo_dataset(
               split="validation",
               dataset_dir=args.save_dir,
               overwrite=False,
-              max_samples=100
+            #   max_samples=20
           )
