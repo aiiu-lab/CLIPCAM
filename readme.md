@@ -23,7 +23,8 @@
     * [Weather Attacks](#weather-attack)
 
 ## Demo
-Please go to this [link](https://jtchen0528.github.io/CLIPCAM/) for a quick demo.
+Please go to this [link](https://jtchen0528.github.io/CLIPCAM/) for a quick demo.  
+<img src="imgs/demo.png" alt="clicpam" width="60%"/>
 
 ## Environment Setup
 1. create conda enviroment with Python=3.7  
