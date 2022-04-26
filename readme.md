@@ -5,6 +5,9 @@
 
 ## Table of Contents
 * [Environment Setup](#environment-setup)
+* [Quick Demo](#quick-demo)
+    * [Website Demo](#website-demo)
+    * [Code Demo](#code-demo)
 * [Supported models for CLIPCAM](#supported-models-for-clipcam)
 * [CAM Variations](#cam-variations)
 * [Dataset Preparation](#dataset-preparation)
@@ -22,10 +25,6 @@
     * [Iterative Mask](#iterative-mask)
     * [Weather Attacks](#weather-attack)
 
-## Demo
-Please go to this [link](https://jtchen0528.github.io/CLIPCAM/) for a quick demo.  
-<img src="imgs/demo.png" alt="clicpam" width="60%"/>
-
 ## Environment Setup
 1. create conda enviroment with Python=3.7  
 `conda create -n clipcam python=3.7`  
@@ -34,6 +33,22 @@ Please go to this [link](https://jtchen0528.github.io/CLIPCAM/) for a quick demo
 `pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html`
 3. install required package  
 `pip install -r requirements.txt`
+
+## Quick Demo  
+### Website Demo  
+Please go to this [link](https://jtchen0528.github.io/CLIPCAM/) for a quick demo.  
+<img src="imgs/demo.png" alt="clicpam" width="60%"/>   
+*P.S. First time user: please follow the instruction on top of the demo website to allow your browser connecting to my server.  
+
+### Code Demo
+```bash
+python clipcam.py \ 
+    --image_path "{single image path or grid image directory (4 images)}" \ 
+    --sentence "{input sentence}" \  
+    --gpu_id 0 \ 
+    --clip_model_name "ViT-B/16" \ 
+    --cam_model_name "GradCAM" \ 
+```
 
 ## Supported Models for CLIPCAM  
 ### CLIP Models (from [OpenAI](https://github.com/openai/CLIP)):  
@@ -241,6 +256,7 @@ Or download the fine-tuned checkpoints from this [OneDrive](https://msseed9-my.s
         --save_dir 'eval_result/custom-input-vitb32-grad'  \
         --distill_num 0
     ```
+
 ## Other features
 ### Iterative Mask
 We propose an iterative refinement method based on masking out high neural importance areas to expand attention or enhance weak response regions.  
