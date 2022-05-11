@@ -1,6 +1,8 @@
 # CLIPCAM: Zero-shot Text-guided Object and Action Localization
 ## Official implementation of CLIPCAM: A Simple Baseline for Zero-shot Object and Action Localization (ICASSP 2022)
 
+[Link to paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9747841)  
+  
 <img src="imgs/clipcam_model.png" alt="clicpam" width="60%"/>
 
 ## Table of Contents
