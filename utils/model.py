@@ -93,7 +93,7 @@ def getCAM(model_name, model, target_layer, gpu_id, reshape_transform):
     elif model_name == "LayerCAM":
         cam = LayerCAM(model=model, target_layer=target_layer, gpu_id=gpu_id, reshape_transform = reshape_transform)
     elif model_name == "GradCAM_original":
-        cam = GradCAMPlusPlus_original(model=model, target_layer=target_layer, gpu_id=gpu_id, reshape_transform = reshape_transform)
+        cam = GradCAM_original(model=model, target_layer=target_layer, gpu_id=gpu_id, reshape_transform = reshape_transform)
     elif model_name == "GradCAMPlusPlus_original":
         cam = GradCAMPlusPlus_original(model=model, target_layer=target_layer, gpu_id=gpu_id, reshape_transform = reshape_transform)
     elif model_name == "XGradCAM_original":
